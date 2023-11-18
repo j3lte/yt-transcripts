@@ -1,11 +1,21 @@
-export const fetcher = (url: string, init: RequestInit = {}, proxy?: string): Promise<Response> => {
-  if (proxy) {
-    return fetch(url, {
-      ...init,
-      client: Deno.createHttpClient({
+export class Fetcher {
+  private client: Deno.HttpClient | null = null;
+
+  constructor(proxy?: string) {
+    if (proxy) {
+      this.client = Deno.createHttpClient({
         proxy: { url: proxy },
-      }),
-    });
+      });
+    }
   }
-  return fetch(url, init);
-};
+
+  fetch(url: string, init?: RequestInit): Promise<Response> {
+    if (this.client) {
+      return fetch(url, {
+        ...init,
+        client: this.client,
+      });
+    }
+    return fetch(url, init);
+  }
+}

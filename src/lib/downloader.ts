@@ -38,7 +38,7 @@ export type TranscriptEntry = {
 };
 
 export abstract class AbstractYoutubeTranscript {
-  fetcher!: (url: string, init: RequestInit, proxy?: string) => Promise<Response>;
+  fetcher!: (url: string, init: RequestInit) => Promise<Response>;
 
   private videoId: string;
   private config: TranscriptConfig;
@@ -86,8 +86,11 @@ export abstract class AbstractYoutubeTranscript {
   public async fetchTranscript(): Promise<TranscriptEntry[]> {
     const response = await this.fetcher(
       `https://www.youtube.com/watch?v=${this.videoId}`,
-      {},
-      this.proxy,
+      {
+        headers: {
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        },
+      },
     );
 
     if (!response.ok) {
@@ -111,7 +114,6 @@ export abstract class AbstractYoutubeTranscript {
           },
           body: JSON.stringify(requestData),
         },
-        this.proxy,
       );
       if (!transcriptResponse.ok) {
         throw new YoutubeTranscriptError("No transcript found");

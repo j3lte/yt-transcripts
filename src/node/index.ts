@@ -1,11 +1,12 @@
 import { AbstractYoutubeTranscript, TranscriptConfig, TranscriptEntry } from "../lib/downloader.ts";
-import { fetcher } from "./fetcher.ts";
+import { Fetcher } from "./fetcher.ts";
 
 export class YoutubeTranscript extends AbstractYoutubeTranscript {
   constructor(videoId: string, config?: TranscriptConfig) {
     super(videoId, config);
+    const fetcher = new Fetcher(config?.proxy);
     // deno-lint-ignore no-explicit-any
-    this.fetcher = fetcher as any;
+    this.fetcher = fetcher.fetch.bind(fetcher) as any;
   }
 }
 
