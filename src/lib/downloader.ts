@@ -89,6 +89,7 @@ export abstract class AbstractYoutubeTranscript {
       {
         headers: {
           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0",
         },
       },
     );
@@ -111,6 +112,7 @@ export abstract class AbstractYoutubeTranscript {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0",
           },
           body: JSON.stringify(requestData),
         },
